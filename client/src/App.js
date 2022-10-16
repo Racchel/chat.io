@@ -1,7 +1,4 @@
-import { config } from './config/socket'
-import { io } from 'socket.io-client'
-
-const socket = io(config.uri, config.opts)
+import socket from './config/socket'
 
 function App() {
   
