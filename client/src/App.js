@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { socket, SOCKET_EVENTS } from './config/socket'
-import { ConnectedUsers, Message, Form } from './components'
-
+import { ChatHistory, Form, UserList} from './components'
 
 function App() {
 
@@ -108,43 +107,63 @@ function App() {
   }
 
   const handleMessage = (e) => {
+
+    console.log('socket', socket)
     e.preventDefault()
-    socket.emit(SOCKET_EVENTS.message_sent, `${username} - ${message}`)
+
+    const newMessage = { 
+      datetime: '10:10 AM, Today',
+      content: message,
+      user: socket.auth.username,
+      socketID: socket.id
+    }
+
+    socket.emit(SOCKET_EVENTS.message_sent, newMessage)
     setMessage('')
   }
 
   return (
-    <div className='container text-center'> 
-      <ConnectedUsers 
-        display={connected}
-        usersList={users}
-      />
-     
-      <div className='row'> 
-        <Form 
-          display={!connected}
-          handleSubmit={handleUsername} 
-          inputValue={username} 
-          setInputValue={setUsername} 
-          inputPlaceholder='Digite seu nome'
-          buttonName='Entrar'
-        />
+    <div class="container-fluid">
+      <div class="row clearfix">
+          <div class="col-lg-12">
+              <div class="card chat-app">
+                <UserList
+                  list={users}
+                />
 
-        <Form 
-          display={connected}
-          handleSubmit={handleMessage} 
-          inputValue={message} 
-          setInputValue={setMessage} 
-          inputPlaceholder='Digite sua mensagem'
-          buttonName='Enviar'
-        />
+                <div class="chat">
+                  <div class="chat-header clearfix">
+                    <div class="row">
+                      <h2>MY CHAT</h2>
+                      <Form 
+                        display={!connected}
+                        handleSubmit={handleUsername} 
+                        inputValue={username} 
+                        setInputValue={setUsername} 
+                        inputPlaceholder='Digite seu nome...'
+                        buttonName='Entrar'
+                      />
+                    </div>
+                  </div>
+                  
 
-        <div className='row pt-5'>
-          <Message 
-            messagesList={messages}
-            isPrimary={true}
-          />        
-        </div>
+                  <ChatHistory 
+                    messages={messages}
+                    socketID={socket.id}
+                  />
+
+                  <Form 
+                    display={connected}
+                    handleSubmit={handleMessage} 
+                    inputValue={message} 
+                    setInputValue={setMessage} 
+                    inputPlaceholder='Digite sua mensagem...'
+                    buttonName='Enviar'
+                  />
+
+                </div>
+              </div>
+          </div>
       </div>
     </div>
   );

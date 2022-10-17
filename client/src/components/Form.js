@@ -6,25 +6,27 @@ export const Form = ({
   buttonName,
   display 
 }) => {
-
+  
   if (display) {
     return (
-      <form onSubmit={handleSubmit} className='text-center pt-3'>
-        <div className='row g-3'>
-          <div className='col-md-8'>
+      <form onSubmit={handleSubmit}>
+        <div class="chat-message clearfix">
+          <div class="input-group mb-0">
             <input 
-              value={inputValue} 
+              type="text" 
               onChange={e => setInputValue(e.target.value)}
-              type='text'
+              value={inputValue} 
+              class="form-control" 
               placeholder={inputPlaceholder}
-              className='form-control'
-            />
-          </div>
+            /> 
   
-          <div className='col-md-4'>
-            <button className='btn btn-secondary' type='submit'>
-              { buttonName }
-            </button>
+            <div class="input-group-prepend">
+              <button type='submit' class="input-group-text">
+                <i class="fa fa-send"></i>
+                {buttonName}
+              </button>
+            </div>         
+  
           </div>
         </div>
       </form>

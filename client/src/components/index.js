@@ -1,6 +1,6 @@
-import { ConnectedUsers } from './ConnectedUsers'
-import { Message } from './Message'
+import { ChatHistory } from './ChatHistory'
 import { Form } from './Form'
+import { UserList } from './UserList'
 
 
-export { ConnectedUsers, Message, Form }
+export { ChatHistory, Form, UserList }
