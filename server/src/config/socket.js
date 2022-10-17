@@ -3,6 +3,7 @@ export const SOCKET_EVENTS = {
   message_received: 'MESSAGE_RECEIVED',
   message_sent: 'MESSAGE_SENT',
   username: 'USERNAME',
+  users: 'USERS',
   connection: 'connection',
   disconnect: 'disconnect'
 }
