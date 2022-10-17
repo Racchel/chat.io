@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import socket from './config/socket'
+import { socket, SOCKET_EVENTS } from './config/socket'
 import { Form } from './components/Form'
 
 function App() {
@@ -10,25 +10,31 @@ function App() {
   const [messages, setMessages] = useState([])
   
   useEffect(() => {
-    socket.on('user joined', msg => {
-      console.log('user joined message', msg)
+    socket.on(SOCKET_EVENTS.user_joined, (message) => {
+      console.log('user joined:', message)
+    })
+
+    socket.on(SOCKET_EVENTS.message_received, (message) => {
+      console.log('message:', message)
+      setMessages((prevMessages) => [...prevMessages, message])
     })
 
     return () => {
-      socket.off('user joined')
+      socket.off(SOCKET_EVENTS.user_joined)
+      socket.off(SOCKET_EVENTS.message_received)
     }
   }, [])
 
 
   const handleUsername = (e) => {
     e.preventDefault()
-    socket.emit('username', username)
+    socket.emit(SOCKET_EVENTS.username, username)
     setConnected(true)
   }
 
   const handleMessage = (e) => {
     e.preventDefault()
-    socket.emit('message', `${username} - ${message}`)
+    socket.emit(SOCKET_EVENTS.message_sent, `${username} - ${message}`)
     setMessage('')
   }
 
@@ -53,6 +59,12 @@ function App() {
           inputPlaceholder='Digite sua mensagem'
           buttonName='Enviar'
         />
+
+        <div className='row'>
+          <pre>
+            {JSON.stringify(messages, null, 4)}
+          </pre>
+        </div>
 
       
       </div>
