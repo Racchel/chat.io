@@ -17,9 +17,23 @@ const addUser = (username) => {
 
 const chat = (io) => {
 
+  // middleware
+  io.use((socket, next) => {
+    const username = socket.handshake.auth.username;
+    console.log('username on handshake', username)
+
+    if(!username) {
+      return next(new Error('invalid username'))
+    }
+
+    socket.username = username;
+    next()
+  })
+
   io.on(SOCKET_EVENTS.connection, (socket) => {
     console.log('socket id: ', socket.id)
 
+    /**
     // USERNAME
     socket.on(SOCKET_EVENTS.username, (username, next) => {
       console.log('username: ', username)
@@ -33,6 +47,33 @@ const chat = (io) => {
         socket.broadcast.emit(SOCKET_EVENTS.user_joined, `${username} joined`)    // emite para todos, exceto para o próprio emissor
       }
     })
+    */
+
+
+    let users = []
+    for (let [id, socket] of io.of('/').sockets) {
+      const existingUser = users.find((user) => user.username === socket.username)
+      
+      if(existingUser) {
+        socket.emit('username taken')
+        socket.disconnect()
+        return
+      } else {
+        users.push({
+          userID: id,
+          username: socket.username
+        })
+      }
+    }
+
+    socket.emit(SOCKET_EVENTS.users, users)
+
+
+    // when a new user joins, notify existing users
+    socket.broadcast.emit(SOCKET_EVENTS.user_connected, {
+      userID: socket.id,
+      username: socket.username
+    }) 
 
     // MESSAGE
     socket.on(SOCKET_EVENTS.message_sent, (message) => {
