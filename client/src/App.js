@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { socket, SOCKET_EVENTS } from './config/socket'
+import toast, { Toaster } from 'react-hot-toast'
 import { ChatHistory, Form, UserList} from './components'
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
       user.hasNewMessages = false
 
       setUsers((prevUsers) => [...prevUsers, user])
+      toast.success(`User connected ${user.username}`)
     })
 
     // USERS
@@ -123,6 +125,7 @@ function App() {
 
   return (
     <div class="container-fluid">
+      <Toaster />
       <div class="row clearfix">
           <div class="col-lg-12">
               <div class="card chat-app">
