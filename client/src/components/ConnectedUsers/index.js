@@ -1,3 +1,5 @@
+import './style.css'
+
 export const ConnectedUsers = ({ display, usersList}) => {
 
   if (display) {
@@ -8,6 +10,12 @@ export const ConnectedUsers = ({ display, usersList}) => {
           {usersList.map((user) => (
             <div key={user.userID}>
               {user.username} {user.self && '(yourself)'}
+
+              {user.connected 
+                ? ( <span className='online-dot'></span> ) 
+                : ( <span className='offline-dot'></span> )
+              }
+
             </div>
           ))}
 

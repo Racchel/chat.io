@@ -64,7 +64,7 @@ function App() {
       socket.off(SOCKET_EVENTS.users)
       socket.off(SOCKET_EVENTS.user_connected)
     }
-  }, [])
+  }, [socket])
 
 
   useEffect(() => { 
@@ -84,7 +84,7 @@ function App() {
     return () => {
       socket.off(SOCKET_EVENTS.user_disconnected)
     }
-  }, [users])
+  }, [users, socket])
 
 
   const handleUsername = (e) => {
