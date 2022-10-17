@@ -59,10 +59,15 @@ function App() {
 
       setUsers(sorted)
     })
+
+    socket.on(SOCKET_EVENTS.username_taken, () => {
+      toast.error('Username taken')
+    })
     
     return () => {
       socket.off(SOCKET_EVENTS.users)
       socket.off(SOCKET_EVENTS.user_connected)
+      socket.off(SOCKET_EVENTS.username_taken)
     }
   }, [socket])
 
@@ -77,6 +82,7 @@ function App() {
 
       allUsers[index] = foundUser
       setUsers([...allUsers])
+      toast.error(`${foundUser.username} left`)
       
     })
 
