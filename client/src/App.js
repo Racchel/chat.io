@@ -18,7 +18,6 @@ function App() {
 
     // MESSAGE
     socket.on(SOCKET_EVENTS.message_received, (message) => {
-      console.log('message:', message)
       setMessages((prevMessages) => [...prevMessages, message])
     })
 
@@ -75,7 +74,6 @@ function App() {
       foundUser.connected = false
 
       allUsers[index] = foundUser
-
       setUsers([...allUsers])
       
     })
@@ -88,32 +86,33 @@ function App() {
 
   const handleUsername = (e) => {
     e.preventDefault()
-    //socket.emit(SOCKET_EVENTS.username, username)
-    //setConnected(true)
 
     socket.auth = { username }
     socket.connect()
 
-    console.log(socket)
-
     setTimeout(() => {
-      if (socket.connected) {
-        console.log("socket.connected", socket)
-        setConnected(true)
-      }
-
+      if (socket.connected) return setConnected(true)
     }, 300)
 
   }
 
-  const handleMessage = (e) => {
+  const getTime = () => {
+    const date = new Date();
+    let currentHours = date.getHours()
+    currentHours = ("0" + currentHours).slice(-2)
 
-    console.log('socket', socket)
+    let currentMinutes = date.getMinutes()
+    currentMinutes = ("0" + currentMinutes).slice(-2)
+
+    return `${currentHours}:${currentMinutes}`
+  }
+
+  const handleMessage = (e) => {
     e.preventDefault()
 
     const newMessage = { 
-      datetime: '10:10 AM, Today',
       content: message,
+      time: getTime(),
       user: socket.auth.username,
       socketID: socket.id
     }
@@ -146,7 +145,6 @@ function App() {
                     </div>
                   </div>
                   
-
                   <ChatHistory 
                     messages={messages}
                     socketID={socket.id}

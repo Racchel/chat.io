@@ -7,7 +7,7 @@ export const Message  =({ message, socketID }) => {
           {message.content} - {message.user}
  
           <div class='text-end'>
-            {message.datetime}
+            {message.time}
           </div>
         </div>                                    
     </li>
