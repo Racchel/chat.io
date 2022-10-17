@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { socket, SOCKET_EVENTS } from './config/socket'
-import { Form, Card } from './components'
+import { ConnectedUsers, Message, Form } from './components'
+
 
 function App() {
 
@@ -11,10 +12,12 @@ function App() {
   const [users, setUsers] = useState([])
   
   useEffect(() => {
+    // USER JOINED
     socket.on(SOCKET_EVENTS.user_joined, (message) => {
       console.log('user joined:', message)
     })
 
+    // MESSAGE
     socket.on(SOCKET_EVENTS.message_received, (message) => {
       console.log('message:', message)
       setMessages((prevMessages) => [...prevMessages, message])
@@ -28,20 +31,53 @@ function App() {
   }, [])
   
   useEffect(() => {
+    // USER CONNECTED
+    socket.on(SOCKET_EVENTS.user_connected, (user) => {
+      user.connected = true
+      user.messages = []
+      user.hasNewMessages = false
+
+      setUsers((prevUsers) => [...prevUsers, user])
+    })
+
+    // USERS
     socket.on(SOCKET_EVENTS.users, (listUsers) => {
+      
+      listUsers.forEach(user => {
+        user.self = user.userID === socket.id
+        user.connected = true
+        user.messages = []
+        user.hasNewMessages = false
+      })
+
       setUsers(listUsers)
     })
     
     return () => {
       socket.off(SOCKET_EVENTS.users)
+      socket.off(SOCKET_EVENTS.user_connected)
     }
   }, [socket])
 
 
   const handleUsername = (e) => {
     e.preventDefault()
-    socket.emit(SOCKET_EVENTS.username, username)
-    setConnected(true)
+    //socket.emit(SOCKET_EVENTS.username, username)
+    //setConnected(true)
+
+    socket.auth = { username }
+    socket.connect()
+
+    console.log(socket)
+
+    setTimeout(() => {
+      if (socket.connected) {
+        console.log("socket.connected", socket)
+        setConnected(true)
+      }
+
+    }, 300)
+
   }
 
   const handleMessage = (e) => {
@@ -52,8 +88,12 @@ function App() {
 
   return (
     <div className='container text-center'> 
+      <ConnectedUsers 
+        display={connected}
+        usersList={users}
+      />
+     
       <div className='row'> 
-
         <Form 
           display={!connected}
           handleSubmit={handleUsername} 
@@ -73,17 +113,10 @@ function App() {
         />
 
         <div className='row pt-5'>
-          <Card 
-            list={messages}
-            isBig={true}
+          <Message 
+            messagesList={messages}
             isPrimary={true}
-          />
-
-          <Card 
-            list={users}
-            isBig={false}
-            isPrimary={false}
-          />
+          />        
         </div>
 
       </div>

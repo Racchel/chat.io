@@ -1,5 +1,6 @@
-import { Card } from './Card'
+import { ConnectedUsers } from './ConnectedUsers'
+import { Message } from './Message'
 import { Form } from './Form'
 
 
-export { Card, Form}
+export { ConnectedUsers, Message, Form }
