@@ -9,6 +9,7 @@ const config = {
 }
 
 const SOCKET_EVENTS = {
+  typing: 'TYPING',
   username_taken: 'USERNAME_TAKEN',
   user_disconnected: 'USER_DISCONNECTED',
   user_connected: 'USER_CONNECTED',

@@ -10,6 +10,11 @@ function App() {
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
   const [users, setUsers] = useState([])
+  const [typing, setTyping] = useState(false)
+
+  if(message) {
+    socket.emit(SOCKET_EVENTS.typing, username)
+  }
   
   useEffect(() => {
     // MESSAGE
@@ -17,10 +22,19 @@ function App() {
       setMessages((prevMessages) => [...prevMessages, message])
     })
 
+    socket.on(SOCKET_EVENTS.typing, (data) => {
+      setTyping(data)
+
+      setTimeout(() => {
+        setTyping('')
+      }, 1000)
+    })
+
     
     return () => {
       socket.off(SOCKET_EVENTS.user_joined)
       socket.off(SOCKET_EVENTS.message_received)
+      socket.off(SOCKET_EVENTS.typing)
     }
   }, [])
   
@@ -135,9 +149,14 @@ function App() {
                 />
 
                 <div class="chat">
-                  <div class="chat-header clearfix">
+                  <div class="chat-header min-vh-30 clearfix">
                     <div class="row">
                       <h2>MY CHAT</h2>
+
+                      {typing && (
+                        <p className='ml-5'>{typing}</p>
+                      )}
+
                       <Form 
                         display={!connected}
                         handleSubmit={handleUsername} 
