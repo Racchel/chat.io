@@ -12,11 +12,6 @@ function App() {
   const [users, setUsers] = useState([])
   
   useEffect(() => {
-    // USER JOINED
-    socket.on(SOCKET_EVENTS.user_joined, (message) => {
-      console.log('user joined:', message)
-    })
-
     // MESSAGE
     socket.on(SOCKET_EVENTS.message_received, (message) => {
       setMessages((prevMessages) => [...prevMessages, message])
