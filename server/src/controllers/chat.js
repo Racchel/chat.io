@@ -84,7 +84,7 @@ const chat = (io) => {
 
     // DISCONNECT
     socket.on(SOCKET_EVENTS.disconnect, () => {
-      console.log('user disconnected')
+      socket.broadcast.emit(SOCKET_EVENTS.user_disconnected, socket.id)
     })
   })
 
