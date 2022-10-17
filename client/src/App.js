@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { socket, SOCKET_EVENTS } from './config/socket'
-import { Form } from './components/Form'
+import { Form, Card } from './components'
 
 function App() {
 
@@ -8,6 +8,7 @@ function App() {
   const [connected, setConnected] = useState(false)
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
+  const [users, setUsers] = useState([])
   
   useEffect(() => {
     socket.on(SOCKET_EVENTS.user_joined, (message) => {
@@ -19,11 +20,22 @@ function App() {
       setMessages((prevMessages) => [...prevMessages, message])
     })
 
+    
     return () => {
       socket.off(SOCKET_EVENTS.user_joined)
       socket.off(SOCKET_EVENTS.message_received)
     }
   }, [])
+  
+  useEffect(() => {
+    socket.on(SOCKET_EVENTS.users, (listUsers) => {
+      setUsers(listUsers)
+    })
+    
+    return () => {
+      socket.off(SOCKET_EVENTS.users)
+    }
+  }, [socket])
 
 
   const handleUsername = (e) => {
@@ -60,13 +72,20 @@ function App() {
           buttonName='Enviar'
         />
 
-        <div className='row'>
-          <pre>
-            {JSON.stringify(messages, null, 4)}
-          </pre>
+        <div className='row pt-5'>
+          <Card 
+            list={messages}
+            isBig={true}
+            isPrimary={true}
+          />
+
+          <Card 
+            list={users}
+            isBig={false}
+            isPrimary={false}
+          />
         </div>
 
-      
       </div>
     </div>
   );
