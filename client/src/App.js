@@ -3,13 +3,23 @@ import socket from './config/socket'
 
 function App() {
 
-  const [username, setUsername] = useState("")
+  const [username, setUsername] = useState('')
   
   const handleUsername = (e) => {
     e.preventDefault()
-    socket.emit("username", username)
+    socket.emit('username', username)
   }
   
+  useEffect(() => {
+    socket.on('user joined', msg => {
+      console.log('user joined message', msg)
+    })
+
+    return () => {
+      socket.off('user joined')
+    }
+  }, [])
+
   return (
     <div className='container text-center'> 
       <div className='row'> 
@@ -19,7 +29,7 @@ function App() {
               <input 
                 value={username} 
                 onChange={e => setUsername(e.target.value)}
-                type="text"
+                type='text'
                 placeholder='Seu nome'
                 className='form-control'
               />
