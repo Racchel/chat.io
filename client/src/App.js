@@ -64,7 +64,27 @@ function App() {
       socket.off(SOCKET_EVENTS.users)
       socket.off(SOCKET_EVENTS.user_connected)
     }
-  }, [socket])
+  }, [])
+
+
+  useEffect(() => { 
+    socket.on(SOCKET_EVENTS.user_disconnected, (id) => {
+      let allUsers = users
+
+      let index = allUsers.findIndex(user => user.userID === id)
+      let foundUser = allUsers[index]
+      foundUser.connected = false
+
+      allUsers[index] = foundUser
+
+      setUsers([...allUsers])
+      
+    })
+
+    return () => {
+      socket.off(SOCKET_EVENTS.user_disconnected)
+    }
+  }, [users])
 
 
   const handleUsername = (e) => {
@@ -125,7 +145,6 @@ function App() {
             isPrimary={true}
           />        
         </div>
-
       </div>
     </div>
   );
