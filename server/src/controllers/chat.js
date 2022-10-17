@@ -55,7 +55,7 @@ const chat = (io) => {
       const existingUser = users.find((user) => user.username === socket.username)
       
       if(existingUser) {
-        socket.emit('username taken')
+        socket.emit(SOCKET_EVENTS.username_taken)
         socket.disconnect()
         return
       } else {
