@@ -50,7 +50,14 @@ function App() {
         user.hasNewMessages = false
       })
 
-      setUsers(listUsers)
+      const sorted = listUsers.sort((a, b) => {
+        if (a.self) return -1
+        if (b.self) return 1
+        if (a.username < b.username) return -1
+        return a.username > b.username ? 1 : 0
+      })
+
+      setUsers(sorted)
     })
     
     return () => {
