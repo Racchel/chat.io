@@ -36,7 +36,7 @@ export const Title = styled.h3`
   text-transform: uppercase;
 `
 
-export const Contacts = styled.div`
+export const Users = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,7 +53,7 @@ export const Contacts = styled.div`
   }
 `
 
-export const Contact = styled.div`
+export const User = styled.div`
   background-color: #ffffff34;
   min-height: 5rem;
   cursor: pointer;
@@ -66,7 +66,7 @@ export const Contact = styled.div`
   transition: 0.5s ease-in-out;
 `
 
-export const ContactAvatar = styled.img`
+export const UserAvatar = styled.img`
   height: 3rem;
 `
 
@@ -82,7 +82,7 @@ export const Info = styled.div`
   };
 `
 
-export const ContactUsername = styled.h4`
+export const UserUsername = styled.h4`
   color: white;
 `
 

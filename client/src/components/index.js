@@ -1,5 +1,5 @@
 import { ChatContainer } from './ChatContainer'
-import { Contacts } from './Contacts'
+import { Users } from './Users'
 import { Welcome } from './Welcome'
 
-export { ChatContainer, Contacts, Welcome }
+export { ChatContainer, Users, Welcome }

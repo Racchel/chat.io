@@ -2,7 +2,7 @@ import React from 'react'
 import Logo from '../../assets/logo.svg'
 import * as S from './style'
 
-export const Contacts = ({ contacts, username }) => {
+export const Users = ({ users, currenteUsername }) => {
   
   return (
     <>
@@ -11,29 +11,29 @@ export const Contacts = ({ contacts, username }) => {
           <S.Logo src={Logo} alt='logo' />
           <S.Title>chat.io</S.Title>
         </S.Brand>
-        <S.Contacts>
-          {contacts.map((contact, index) => {
-            if (!contact.self ) {
+        <S.Users>
+          {users.map((user, index) => {
+            if (!user.self ) {
               return (
-                <S.Contact key={index}>
+                <S.User key={index}>
                   <div>
-                    <S.ContactAvatar
+                    <S.UserAvatar
                       src='https://ksastcorpsites.blob.core.windows.net/site/general/63703629760793-image.jpg?width=100'
                       alt='avatar'
                     />
                   </div>
                   <S.Info>
-                    <S.ContactUsername>{contact.username}</S.ContactUsername>
-                    <p className={`status-${ contact.connected ? 'online' : 'offline'}`}>
-                      { contact.connected ? 'online' : 'offline'}
+                    <S.UserUsername>{user.username}</S.UserUsername>
+                    <p className={`status-${ user.connected ? 'online' : 'offline'}`}>
+                      { user.connected ? 'online' : 'offline'}
                     </p>
                   </S.Info>
-                </S.Contact>
+                </S.User>
               )
             }}
           )}
         
-        </S.Contacts>
+        </S.Users>
         <S.CurrentUser>
           <div>
             <S.CurrentAvatar
@@ -42,7 +42,7 @@ export const Contacts = ({ contacts, username }) => {
             />
           </div>
           <div>
-            <S.CurrentUsername>{username}</S.CurrentUsername>
+            <S.CurrentUsername>{currenteUsername}</S.CurrentUsername>
           </div>
         </S.CurrentUser>
       </S.Container>

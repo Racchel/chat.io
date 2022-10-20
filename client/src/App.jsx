@@ -11,6 +11,7 @@ function App() {
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
   const [users, setUsers] = useState([])
+  const [selectedUser, setSelectedUser] = useState(null)
   const [typing, setTyping] = useState(false)
 
   if(message) {
@@ -151,6 +152,8 @@ function App() {
 
   return (
     <Chat
+      selectedUser={selectedUser}
+      setSelectedUser={setSelectedUser}
       username={username}
       users={users}
       typing={typing}

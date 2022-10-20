@@ -1,18 +1,20 @@
 import React from 'react'
-import { ChatContainer, Contacts } from '../../components'
+import { ChatContainer, Users } from '../../components'
 import { Toaster } from 'react-hot-toast'
 import * as S from './style'
 
 export default function Chat({
+  selectedUser,
+  setSelectedUser,
   username,
   users,
   typing,
   socket,
-  connected,
   messages,
   message,
   handleMessage,
-  setMessage
+  setMessage,
+  connected,
 }) {
  
   return (
@@ -20,9 +22,11 @@ export default function Chat({
       <Toaster />
       <S.Container>
         <S.Content>
-          <Contacts 
-            contacts={users}
-            username={username}
+          <Users 
+            users={users}
+            currenteUsername={username}
+            selectedUser={selectedUser}
+            setSelectedUser={setSelectedUser}
           />
           <ChatContainer
             typing={typing}
