@@ -106,6 +106,10 @@ function App() {
   const handleUsername = (e) => {
     e.preventDefault()
 
+    if (!username) return toast.error('Username é obrigatório.')
+    if (username.length < 3) return toast.error('Mínimo 3 caracteres.')
+    if (username.length > 12) return toast.error('Máximo 12 caracteres.')
+
     socket.auth = { username }
     socket.connect()
 
