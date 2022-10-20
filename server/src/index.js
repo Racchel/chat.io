@@ -1,9 +1,9 @@
-import express from 'express';
-import cors from "cors"
+import express from 'express'
+import cors from 'cors'
 import dotenv from 'dotenv'
 import { createServer } from 'http'
-import { Server } from "socket.io";
-import chat from "./controllers/chat.js"
+import { Server } from 'socket.io'
+import chat from './controllers/chat.js'
 
 dotenv.config()
 
@@ -29,7 +29,7 @@ app.use( express.urlencoded({ extended: true }))
 
 // rest api
 app.get('/api', (req, res) => {
-  res.send("Helloooo!")
+  res.send('Helloooo!')
 })
 
 // socket

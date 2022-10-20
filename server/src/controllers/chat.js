@@ -4,13 +4,13 @@ const chat = (io) => {
 
   // middleware
   io.use((socket, next) => {
-    const username = socket.handshake.auth.username;
+    const username = socket.handshake.auth.username
 
     if(!username) {
-      return next(new Error('invalid username'))
+      return next(new Error('Username inválido'))
     }
 
-    socket.username = username;
+    socket.username = username
     next()
   })
 
@@ -46,7 +46,7 @@ const chat = (io) => {
     })
 
     socket.on(SOCKET_EVENTS.typing, (username) => {
-      socket.broadcast.emit(SOCKET_EVENTS.typing, `${username} is typing...`)
+      socket.broadcast.emit(SOCKET_EVENTS.typing, `${username} está digitando...`)
     })
 
     // DISCONNECT
