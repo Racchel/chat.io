@@ -1,6 +1,5 @@
-import { ChatHistory } from './ChatHistory'
-import { Form } from './Form'
-import { UserList } from './UserList'
+import { ChatContainer } from './ChatContainer'
+import { Contacts } from './Contacts'
+import { Welcome } from './Welcome'
 
-
-export { ChatHistory, Form, UserList }
+export { ChatContainer, Contacts, Welcome }

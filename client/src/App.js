@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { socket, SOCKET_EVENTS } from './config/socket'
-import toast, { Toaster } from 'react-hot-toast'
-import { ChatHistory, Form, UserList} from './components'
+import toast from 'react-hot-toast'
+
+import { Login, Chat } from './pages'
 
 function App() {
 
@@ -46,7 +47,7 @@ function App() {
       user.hasNewMessages = false
 
       setUsers((prevUsers) => [...prevUsers, user])
-      toast.success(`User connected ${user.username}`)
+      toast.success(`Novo usuário conectado: ${user.username}`)
     })
 
     // USERS
@@ -70,7 +71,7 @@ function App() {
     })
 
     socket.on(SOCKET_EVENTS.username_taken, () => {
-      toast.error('Username taken')
+      toast.error('Username já utilizado!')
     })
     
     return () => {
@@ -91,7 +92,7 @@ function App() {
 
       allUsers[index] = foundUser
       setUsers([...allUsers])
-      toast.error(`${foundUser.username} left`)
+      toast.error(`${foundUser.username} saiu.`)
       
     })
 
@@ -114,12 +115,12 @@ function App() {
   }
 
   const getTime = () => {
-    const date = new Date();
+    const date = new Date()
     let currentHours = date.getHours()
-    currentHours = ("0" + currentHours).slice(-2)
+    currentHours = ('0' + currentHours).slice(-2)
 
     let currentMinutes = date.getMinutes()
-    currentMinutes = ("0" + currentMinutes).slice(-2)
+    currentMinutes = ('0' + currentMinutes).slice(-2)
 
     return `${currentHours}:${currentMinutes}`
   }
@@ -138,56 +139,30 @@ function App() {
     setMessage('')
   }
 
+  if (!connected) {
+    return (
+      <Login 
+        handleSubmit={handleUsername} 
+        inputValue={username} 
+        setInputValue={setUsername} 
+      />
+    )
+  }
+
   return (
-    <div class="container-fluid">
-      <Toaster />
-      <div class="row clearfix">
-          <div class="col-lg-12">
-              <div class="card chat-app">
-                <UserList
-                  list={users}
-                />
+    <Chat
+      username={username}
+      users={users}
+      typing={typing}
+      socket={socket}
+      connected={connected}
+      messages={messages}
+      message={message} 
+      handleMessage={handleMessage} 
+      setMessage={setMessage} 
+    />
+  )
 
-                <div class="chat">
-                  <div class="chat-header min-vh-30 clearfix">
-                    <div class="row">
-                      <h2>MY CHAT</h2>
-
-                      {typing && (
-                        <p className='ml-5'>{typing}</p>
-                      )}
-
-                      <Form 
-                        display={!connected}
-                        handleSubmit={handleUsername} 
-                        inputValue={username} 
-                        setInputValue={setUsername} 
-                        inputPlaceholder='Digite seu nome...'
-                        buttonName='Entrar'
-                      />
-                    </div>
-                  </div>
-                  
-                  <ChatHistory 
-                    messages={messages}
-                    socketID={socket.id}
-                  />
-
-                  <Form 
-                    display={connected}
-                    handleSubmit={handleMessage} 
-                    inputValue={message} 
-                    setInputValue={setMessage} 
-                    inputPlaceholder='Digite sua mensagem...'
-                    buttonName='Enviar'
-                  />
-
-                </div>
-              </div>
-          </div>
-      </div>
-    </div>
-  );
 }
 
-export default App;
+export default App

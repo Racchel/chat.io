@@ -15,8 +15,8 @@ const SOCKET_EVENTS = {
   user_connected: 'USER_CONNECTED',
   message_received: 'MESSAGE_RECEIVED',
   message_sent: 'MESSAGE_SENT',
-  username: "USERNAME",
-  users: "USERS"
+  username: 'USERNAME',
+  users: 'USERS'
 }
 
 const socket = io(config.uri, config.opts)
