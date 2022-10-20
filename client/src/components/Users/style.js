@@ -25,6 +25,7 @@ export const Brand = styled.div`
   align-items: center;
   gap: 1rem;
   justify-content: center;
+  cursor: pointer;
 `
 
 export const Logo = styled.img`

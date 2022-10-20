@@ -5,7 +5,7 @@ import * as S from './style'
 
 export default function Chat({
   selectedUser,
-  setSelectedUser,
+  handleUsernameClick,
   username,
   users,
   typing,
@@ -26,9 +26,10 @@ export default function Chat({
             users={users}
             currenteUsername={username}
             selectedUser={selectedUser}
-            setSelectedUser={setSelectedUser}
+            handleUsernameClick={handleUsernameClick}
           />
           <ChatContainer
+            selectedUser={selectedUser}
             typing={typing}
             messages={messages}
             socketID={socket.id}

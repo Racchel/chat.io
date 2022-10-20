@@ -6,6 +6,7 @@ export const ChatInput = ({
   handleMessage,
   message,
   setMessage,
+  selectedUser
 }) => {
 
   return (
@@ -13,13 +14,13 @@ export const ChatInput = ({
       <S.InputContainer onSubmit={handleMessage}>
         <S.Input
           type='text'
-          placeholder='type your message here'
+          placeholder={selectedUser ? 'digite sua mensagem privada' : 'digite sua mensagem pública'}
           onChange={e => setMessage(e.target.value)}
           value={message} 
         />
         <S.Button type='submit'>
           <IoMdSend />
-        </S.Button>
+        </S.Button> 
       </S.InputContainer>
     </S.Container>
   )

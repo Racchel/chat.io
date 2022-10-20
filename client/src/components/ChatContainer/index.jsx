@@ -3,6 +3,7 @@ import { ChatInput } from '../ChatInput'
 import * as S from './style'
 
 export const ChatContainer = ({ 
+  selectedUser,
   typing,
   handleMessage,
   message,
@@ -20,6 +21,7 @@ export const ChatContainer = ({
   return (
     <S.Container>
       <S.ChatHeader>
+        <HeaderDetails selectedUser={selectedUser}/>
         {typing && <S.Typing>{typing}</S.Typing>}
       </S.ChatHeader>
       <S.ChatMessage>
@@ -42,13 +44,14 @@ export const ChatContainer = ({
         handleMessage={handleMessage} 
         message={message} 
         setMessage={setMessage} 
+        selectedUser={selectedUser}
       />
     </S.Container>
   )
 }
 
 
-const HeaderDetails = () => {
+const HeaderDetails = ({ selectedUser }) => {
   return (
     <S.UserDetails>
       <div>
@@ -58,7 +61,7 @@ const HeaderDetails = () => {
         />
       </div>
       <div>
-        <S.Username>Racchel</S.Username>
+        <S.Username>{selectedUser ? selectedUser.username : 'Sala Pública'}</S.Username>
       </div>
     </S.UserDetails>
   )

@@ -6,13 +6,23 @@ import { Login, Chat } from './pages'
 
 function App() {
 
-  const [username, setUsername] = useState('')
   const [connected, setConnected] = useState(false)
+  
+  // message
   const [message, setMessage] = useState('')
+  const [privateMessage, setPrivateMessage] = useState('')
+  const [typing, setTyping] = useState(false)
+  
+  // listMessages
   const [messages, setMessages] = useState([])
+  const [privateMessages, setPrivateMessages] = useState([])
+
+  
+  //users
+  const [username, setUsername] = useState('')
   const [users, setUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState(null)
-  const [typing, setTyping] = useState(false)
+
 
   if(message) {
     socket.emit(SOCKET_EVENTS.typing, username)
@@ -119,6 +129,26 @@ function App() {
 
   }
 
+
+  const handleUsernameClick = (user) => {
+
+    if (user === null) return setSelectedUser(null)
+
+    if (user.self || !user.connected) return
+
+    setSelectedUser({...user, hasNewMessages: false })
+
+
+    let allUsers = users
+
+    let index = allUsers.findIndex(u => u.userID === user.userID)
+    let foundUser = allUsers[index]
+    foundUser.hasNewMessages = false
+
+    allUsers[index] = foundUser
+    setUsers([...allUsers])
+  }
+
   const getTime = () => {
     const date = new Date()
     let currentHours = date.getHours()
@@ -144,6 +174,35 @@ function App() {
     setMessage('')
   }
 
+  const handlePrivateMessage = (e) => {
+    e.preventDefault()
+
+    if (selectedUser) {
+
+      const newMessage = { 
+        content: privateMessage,
+        to: selectedUser.userID,
+        time: getTime(),
+        user: socket.auth.username,
+        socketID: socket.id
+      }
+
+      socket.emit(SOCKET_EVENTS.private_message_sent, newMessage)
+
+      let updated = selectedUser;
+
+      updated.messages.push(({
+        content: privateMessage,
+        fromSelf: true,
+        hasNewMessages: false
+      }));
+
+      setSelectedUser(updated)
+      setPrivateMessage('')
+    }
+ 
+  }
+
   if (!connected) {
     return (
       <Login 
@@ -154,10 +213,29 @@ function App() {
     )
   }
 
+
+  // private
+  if (selectedUser) {
+    <Chat
+      selectedUser={selectedUser}
+      handleUsernameClick={handleUsernameClick}
+      username={username}
+      users={users}
+      typing={typing}
+      socket={socket}
+      connected={connected}
+      messages={privateMessages}
+      message={privateMessage} 
+      handleMessage={handlePrivateMessage} 
+      setMessage={setPrivateMessage} 
+    />
+  }
+
+  // public
   return (
     <Chat
       selectedUser={selectedUser}
-      setSelectedUser={setSelectedUser}
+      handleUsernameClick={handleUsernameClick}
       username={username}
       users={users}
       typing={typing}

@@ -2,12 +2,12 @@ import React from 'react'
 import Logo from '../../assets/logo.svg'
 import * as S from './style'
 
-export const Users = ({ users, currenteUsername }) => {
+export const Users = ({ users, currenteUsername, handleUsernameClick }) => {
   
   return (
     <>
       <S.Container>
-        <S.Brand>
+        <S.Brand  onClick={() => handleUsernameClick(null)}>
           <S.Logo src={Logo} alt='logo' />
           <S.Title>chat.io</S.Title>
         </S.Brand>
@@ -15,7 +15,7 @@ export const Users = ({ users, currenteUsername }) => {
           {users.map((user, index) => {
             if (!user.self ) {
               return (
-                <S.User key={index}>
+                <S.User key={index} onClick={() => handleUsernameClick(user)}>
                   <div>
                     <S.UserAvatar
                       src='https://ksastcorpsites.blob.core.windows.net/site/general/63703629760793-image.jpg?width=100'
