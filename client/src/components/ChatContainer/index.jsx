@@ -17,7 +17,7 @@ export const ChatContainer = ({
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
-  
+
   return (
     <S.Container>
       <S.ChatHeader>

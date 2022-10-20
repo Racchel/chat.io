@@ -15,8 +15,6 @@ function App() {
   
   // listMessages
   const [messages, setMessages] = useState([])
-  const [privateMessages, setPrivateMessages] = useState([])
-
   
   //users
   const [username, setUsername] = useState('')
@@ -112,6 +110,44 @@ function App() {
     }
   }, [users, socket])
 
+  useEffect(() => { console.log("users mudouuuuu", users)}, [users])
+
+
+  useEffect(() => {
+    socket.on(SOCKET_EVENTS.private_message_received, (data) => {
+     // console.log('message >', message, ' from > ', from)
+     
+     let allUsers = users
+     
+      let index = allUsers.findIndex(u => u.userID === data.from)
+      let foundUser = allUsers[index]                 
+      
+      foundUser.messages.push({
+        ...data.message,
+        fromSelf: false
+      })
+
+      if (foundUser) {
+        if (selectedUser) {
+          if (foundUser.userID !== selectedUser.userID) {
+            foundUser.hasNewMessages = true
+          } else {
+            foundUser.hasNewMessages = false
+          }
+        }
+      }
+       
+
+      allUsers[index] = foundUser
+      setUsers([...allUsers])
+      
+      return () => {
+        socket.off(SOCKET_EVENTS.private_message_received)
+      }
+    })
+
+  }, [users])
+
 
   const handleUsername = (e) => {
     e.preventDefault()
@@ -132,7 +168,7 @@ function App() {
 
   const handleUsernameClick = (user) => {
 
-    if (user === null) return setSelectedUser(null)
+    if (!user) return setSelectedUser(null)
 
     if (user.self || !user.connected) return
 
@@ -180,11 +216,13 @@ function App() {
     if (selectedUser) {
 
       const newMessage = { 
-        content: privateMessage,
         to: selectedUser.userID,
-        time: getTime(),
-        user: socket.auth.username,
-        socketID: socket.id
+        message: {
+          content: privateMessage,
+          time: getTime(),
+          user: username,
+          socketID: socket.id
+        }
       }
 
       socket.emit(SOCKET_EVENTS.private_message_sent, newMessage)
@@ -216,19 +254,23 @@ function App() {
 
   // private
   if (selectedUser) {
-    <Chat
-      selectedUser={selectedUser}
-      handleUsernameClick={handleUsernameClick}
-      username={username}
-      users={users}
-      typing={typing}
-      socket={socket}
-      connected={connected}
-      messages={privateMessages}
-      message={privateMessage} 
-      handleMessage={handlePrivateMessage} 
-      setMessage={setPrivateMessage} 
-    />
+    return (
+      <>
+        <Chat
+          selectedUser={selectedUser}
+          handleUsernameClick={handleUsernameClick}
+          username={username}
+          users={users}
+          typing={typing}
+          socket={socket}
+          connected={connected}
+          messages={selectedUser.messages}
+          message={privateMessage} 
+          handleMessage={handlePrivateMessage} 
+          setMessage={setPrivateMessage} 
+        />
+      </>
+    )
   }
 
   // public
