@@ -49,6 +49,13 @@ const chat = (io) => {
       socket.broadcast.emit(SOCKET_EVENTS.typing, `${username} está digitando...`)
     })
 
+    socket.on(SOCKET_EVENTS.private_message_sent, (message) => {
+      socket.to(message.to).emit(SOCKET_EVENTS.private_message_received, {
+        message,
+        from: socket.id
+      })
+    })
+
     // DISCONNECT
     socket.on(SOCKET_EVENTS.disconnect, () => {
       socket.broadcast.emit(SOCKET_EVENTS.user_disconnected, socket.id)
