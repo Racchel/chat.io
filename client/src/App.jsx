@@ -42,7 +42,6 @@ function App() {
 
     
     return () => {
-      socket.off(SOCKET_EVENTS.user_joined)
       socket.off(SOCKET_EVENTS.message_received)
       socket.off(SOCKET_EVENTS.typing)
     }
